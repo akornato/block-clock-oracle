@@ -19,28 +19,13 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface OracleDailyInterface extends ethers.utils.Interface {
+interface OwnableInterface extends ethers.utils.Interface {
   functions: {
-    "addDaily(string,uint256,uint256)": FunctionFragment;
-    "dailyBlockCount(string)": FunctionFragment;
-    "dailyGasFees(string)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "addDaily",
-    values: [string, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "dailyBlockCount",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "dailyGasFees",
-    values: [string]
-  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -51,15 +36,6 @@ interface OracleDailyInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
 
-  decodeFunctionResult(functionFragment: "addDaily", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "dailyBlockCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "dailyGasFees",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -81,7 +57,7 @@ export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
 >;
 
-export class OracleDaily extends BaseContract {
+export class Ownable extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -122,23 +98,9 @@ export class OracleDaily extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: OracleDailyInterface;
+  interface: OwnableInterface;
 
   functions: {
-    addDaily(
-      day: string,
-      _dailyBlockCount: BigNumberish,
-      _dailyGasFees: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    dailyBlockCount(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    dailyGasFees(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -150,17 +112,6 @@ export class OracleDaily extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  addDaily(
-    day: string,
-    _dailyBlockCount: BigNumberish,
-    _dailyGasFees: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  dailyBlockCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  dailyGasFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -174,20 +125,6 @@ export class OracleDaily extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    addDaily(
-      day: string,
-      _dailyBlockCount: BigNumberish,
-      _dailyGasFees: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    dailyBlockCount(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    dailyGasFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
@@ -217,20 +154,6 @@ export class OracleDaily extends BaseContract {
   };
 
   estimateGas: {
-    addDaily(
-      day: string,
-      _dailyBlockCount: BigNumberish,
-      _dailyGasFees: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    dailyBlockCount(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    dailyGasFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
@@ -244,23 +167,6 @@ export class OracleDaily extends BaseContract {
   };
 
   populateTransaction: {
-    addDaily(
-      day: string,
-      _dailyBlockCount: BigNumberish,
-      _dailyGasFees: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    dailyBlockCount(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    dailyGasFees(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(

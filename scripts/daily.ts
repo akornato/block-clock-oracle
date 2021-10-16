@@ -7,6 +7,7 @@ import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
 import moment from "moment";
 const EthDater = require("ethereum-block-by-date");
+const { CONTRACT_ADDRESS } = process.env;
 
 const dater = new EthDater(
   ethers.provider // Ethers provider, required.
@@ -61,9 +62,10 @@ async function main() {
     console.log("Total fees:", ethers.utils.formatEther(totalGasFees));
   }
 
+  console.log(`Connecting to OracleDaily at ${CONTRACT_ADDRESS}`);
   const OracleDaily = await ethers.getContractAt(
     "OracleDaily",
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    CONTRACT_ADDRESS || ""
   );
   const tx = await OracleDaily.addDaily(
     yesterday.format("YYYYMMDD"),
@@ -78,8 +80,8 @@ async function main() {
     ).toString()}`
   );
   console.log(
-    `OracleDaily.dailyGasFees: ${await OracleDaily.dailyGasFees(
-      yesterday.format("YYYYMMDD")
+    `OracleDaily.dailyGasFees: ${(
+      await OracleDaily.dailyGasFees(yesterday.format("YYYYMMDD"))
     ).toString()}`
   );
 }

@@ -2,8 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract OracleDaily {
+contract OracleDaily is Ownable {
     mapping(string => uint256) public dailyBlockCount;
     mapping(string => uint256) public dailyGasFees;
 
@@ -15,7 +16,7 @@ contract OracleDaily {
         string memory day,
         uint256 _dailyBlockCount,
         uint256 _dailyGasFees
-    ) public {
+    ) public onlyOwner {
         dailyBlockCount[day] = _dailyBlockCount;
         dailyGasFees[day] = _dailyGasFees;
     }

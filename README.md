@@ -1,10 +1,10 @@
 # Oracle Daily
 
-`OracleDaily` contract stores daily block counts and total transaction fees, computed and updated by a scheduled Node script.
+[OracleDaily](https://ropsten.etherscan.io/address/0x9148aAF0E65Be4f79158e8b257eFd06095146Af9#code) contract stores daily block counts and total transaction fees, computed and updated by a scheduled Node script.
 
 The `daily` script is intended to be run shortly after UTC midnight. It first uses [ethereum-block-by-date](https://github.com/monosux/ethereum-block-by-date) to determine the previous day's starting and ending block range. Then it goes over all the blocks in the range summing up all the transaction fees. Finally it calls `OracleDaily`'s `addDaily` with the result.
 
-You better run a local node for this to run fast enough.
+Best run a local node for the script to run fast enough.
 
 ## Advanced Sample Hardhat Project
 
